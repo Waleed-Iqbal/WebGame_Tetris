@@ -2,9 +2,15 @@ const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 
 context.scale(20, 20);
-
 context.fillStyle = "black"; //#000
 context.fillRect(0, 0, canvas.width, canvas.height);
+
+let dropCounter = 0;
+let dropInterval = 1000;
+let lastTime = 0;
+const colors = [null, "#ff0d72", "#0dc2ff", "#0dff72", "#f538ff", "#ff8e0d", "#ffe138", "#3877ff"];
+const arena = createMatrix(12, 20);
+
 
 function arenaSweep() {
     let rowCount = 1;
@@ -119,10 +125,6 @@ function merge(arena, player) {
     });
 }
 
-const colors = [null, "#ff0d72", "#0dc2ff", "#0dff72", "#f538ff", "#ff8e0d", "#ffe138", "#3877ff"];
-
-const arena = createMatrix(12, 20);
-
 const player = {
     pos: {
         x: 0,
@@ -144,10 +146,6 @@ function playerDrop() {
     dropCounter = 0;
 }
 
-let dropCounter = 0;
-let dropInterval = 1000;
-let lastTime = 0;
-
 function update(time = 0) {
     const deltaTime = time - lastTime;
     lastTime = time;
@@ -163,7 +161,6 @@ function update(time = 0) {
 function updateScore() {
     document.getElementById("score").innerText = player.score;
 }
-
 
 function playerMove(direction) {
     player.pos.x += direction;
@@ -213,20 +210,6 @@ function rotate(matrix, direction) {
         matrix.reverse(); // counter-clockwise rotation
     }
 }
-
-document.addEventListener('keydown', event => {
-    if (event.keyCode === 37) { // left
-        playerMove(-1);
-    } else if (event.keyCode === 39) { // right
-        playerMove(1);
-    } else if (event.keyCode === 40) { // down
-        playerDrop();
-    } else if (event.keyCode === 81) { // Q (counter-clockwise rotation)
-        playerRotate(-1);
-    } else if (event.keyCode === 87) { // W (clockwise rotation)
-        playerRotate(1);
-    }
-});
 
 playerReset();
 updateScore();
